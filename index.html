@@ -20,8 +20,8 @@
         }
 
         :root {
-            --red: #fe3d3d;
-            --winning-blocks: #2d414b;
+            --red: #F4A261;
+            --green: #2A9D8F;
         }
 
         body {
@@ -30,7 +30,7 @@
         }
 
         h1 {
-            font-size: 54px;
+            font-size: 3rem;
             text-transform: uppercase;
         }
 
@@ -41,7 +41,7 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            background-color: #1a1a1a;
+            background-color: #264653;
         }
 
         #gameboard {
@@ -58,9 +58,10 @@
             align-items: center;
             justify-content: center;
             color: var(--red);
+            /* border-color: #ffffff; */
             font-size: 120px;
-            border-right: 2px solid;
-            border-bottom: 2px solid;
+            border-right: 2px solid #E76F51;
+            border-bottom: 2px solid #E76F51;
         }
 
         .box:nth-child(3n) {
@@ -107,7 +108,10 @@
         </div>
     </div>
     <script type="module">
-        import init, { getState, makeTurn, isGameOver, getWinner, restart } from "./pkg/tictactoe_web.js";
+        import init, { getState, makeTurn, isGameOver, getLastPlayed, restart } from "./tictactoe_web.js";
+
+        const RED_COLOR = "#F4A261";
+        const GREEN_COLOR = "#2A9D8F";
 
         async function main() {
             await init();
@@ -122,12 +126,17 @@
             let i = 0;
             for (let button of buttons) {
                 button.innerHTML = data[i];
+                if (button.innerHTML == "X") {
+                    button.style.color = RED_COLOR;
+                } else {
+                    button.style.color = GREEN_COLOR;
+                }
                 i++;
             }
 
             let textEl = document.getElementById("playerText");
             if (isGameOver()) {
-                textEl.innerText = "Game Won by " + getWinner();
+                textEl.innerText = "Game Won by " + getLastPlayed();
             }
         }
 
@@ -146,7 +155,6 @@
 
         function addClickListeners() {
             let buttons = document.getElementsByClassName("box");
-            console.log(buttons);
 
             for (let button of buttons) {
                 button.addEventListener("click", (e) => {

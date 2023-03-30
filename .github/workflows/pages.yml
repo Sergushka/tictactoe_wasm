@@ -28,18 +28,17 @@ jobs:
       - name: Rust Cache # cache the rust build artefacts
         uses: Swatinem/rust-cache@v1
       - name: Download and install Wasm pack binary
-        run: wget -qO- https://github.com/rustwasm/wasm-pack/releases/download/v0.11.0/wasm-pack-v0.11.0-x86_64-unknown-linux-musl.tar.gz | tar -xzf-
+        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
       - name: Build # build
-        # "${GITHUB_REPOSITORY#*/}" evaluates into the name of the repository
-        # using --public-url something will allow trunk to modify all the href paths like from favicon.ico to repo_name/favicon.ico .
-        # this is necessary for github pages where the site is deployed to username.github.io/repo_name and all files must be requested
-        # relatively as eframe_template/favicon.ico. if we skip public-url option, the href paths will instead request username.github.io/favicon.ico which
-        # will obviously return error 404 not found.
-        run: ./wasm-pack build --release --target web
+        run: wasm-pack build --out-dir build --release --target web
+      - name: Remove gitignore and package json # build
+        run: rm -rf ./build/.gitignore ./build/package.json
+      - name: Copy index html # build
+        run: cp ./index.html ./build/
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: pkg
+          folder: build
           # this option will not maintain any history of your previous pages deployment
           # set to false if you want all page build to be committed to your gh-pages branch history
           single-commit: true

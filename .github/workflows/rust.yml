@@ -78,6 +78,6 @@ jobs:
           target: wasm32-unknown-unknown
           override: true
       - name: Download and install wasm-pack binary
-        run: wget -qO- https://github.com/rustwasm/wasm-pack/releases/download/v0.11.0/wasm-pack-v0.11.0-x86_64-unknown-linux-musl.tar.gz | tar -xzf-
+        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
       - name: Build
-        run: ./wasm-pack build --target web
+        run: wasm-pack build --out-dir build --target web

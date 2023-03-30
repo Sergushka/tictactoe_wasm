@@ -52,6 +52,8 @@ impl Game {
 
     pub fn restart(&mut self) {
         self.state = [Player::Empty; 9];
+        self.last = Player::X;
+        self.finished = false;
     }
 
     fn flip_last(&mut self) {

@@ -25,8 +25,8 @@ pub fn is_game_over() -> bool {
     GAME.with(|game| game.borrow().is_finished())
 }
 
-#[wasm_bindgen(js_name = getWinner)]
-pub fn get_winnder() -> String {
+#[wasm_bindgen(js_name = getLastPlayed)]
+pub fn get_winner() -> String {
     GAME.with(|game| game.borrow().get_last_opposite())
 }
 
