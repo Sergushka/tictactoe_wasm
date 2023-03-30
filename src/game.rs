@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 pub struct Game {
     state: [Player; 9],
     last: Player,
@@ -21,8 +23,18 @@ impl Player {
     }
 }
 
+impl Display for Player {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Player::O => f.write_str("O"),
+            Player::X => f.write_str("X"),
+            _ => f.write_str(" "),
+        }
+    }
+}
+
 impl Game {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Self {
             state: [Player::Empty; 9],
             last: Player::X,
@@ -30,16 +42,32 @@ impl Game {
         }
     }
 
+    pub fn get_state(&self) -> String {
+        self.state.map(|p| p.to_string()).join("\n")
+    }
+
+    pub fn get_last_opposite(&self) -> String {
+        self.last.get_opposite().to_string()
+    }
+
+    pub fn restart(&mut self) {
+        self.state = [Player::Empty; 9];
+    }
+
     fn flip_last(&mut self) {
         self.last = self.last.get_opposite();
     }
 
-    fn make_turn(&mut self, i: usize) {
+    pub fn make_turn(&mut self, i: usize) {
         if self.state[i] == Player::Empty && !self.finished {
             self.state[i] = self.last;
             self.flip_last();
             self.game_over();
         }
+    }
+
+    pub fn is_finished(&self) -> bool {
+        self.finished
     }
 
     fn game_over(&mut self) {
